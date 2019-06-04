@@ -9,14 +9,13 @@ def load_sheet(file_name, sheet_name):
 
 
 
-def filter_everything(df, lok, sala, tyg, dzien, sem, godz):
-    if isinstance(tyg, str):
+def filter_everything(df, lok, sala, tyg, dzien, godz):
+    if tyg != 'AB':
         df = df[(df['tyg'] == tyg)]
     
     df = df[(df['sala'] == sala) &
             (df['dzien'] == dzien) &
             (df['lok'] == lok) &
-            (df['sem'] == sem) &
             (df['godz'] == godz)]
     return df
 
@@ -25,21 +24,18 @@ def find_conflict(df):
     new = pd.DataFrame(columns=df.columns.tolist())
     for every_godz in df['godz'].unique():
         print('godz')
-        for every_sem in df['sem'].unique():
-            print('sem')
-            for every_lok in df['lok'].unique():
-                print("lok")
-                for every_sala in df['sala'].unique():
-                    print("sala")
-                    for every_tyg in df['tyg'].unique():
-                        print("tyg")
-                        for every_dzien in df['dzien'].unique():
-                            print("dzien")
-                            df = filter_everything(df, every_lok, every_sala, every_tyg, every_dzien, every_sem, every_godz)
-                            if df.shape[0] > 1:
-                                new = pd.concat([df, new])
+        for every_lok in df['lok'].unique():
+            print("lok")
+            for every_sala in df['sala'].unique():
+                print("sala")
+                for every_tyg in df['tyg'].unique():
+                    print("tyg")
+                    for every_dzien in df['dzien'].unique():
+                        print("dzien")
+                        df = filter_everything(df, every_lok, every_sala, every_tyg, every_dzien, every_godz)
+                        if df.shape[0] > 1:
+                            new = pd.concat([df, new])
     return new
-
 
 def finder(file_name, file_sheet1, file_sheet2):
     
