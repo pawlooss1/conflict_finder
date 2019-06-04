@@ -10,19 +10,14 @@ def load_sheet(file_name, sheet_name):
 
 
 def filter_everything(df, lok, sala, tyg, dzien, sem, godz):
-    if not isinstance(tyg, str):
-        df = df[(df['sala'] == sala) &
-                (df['dzien'] == dzien) &
-                (df['lok'] == lok) &
-                (df['sem'] == sem) &
-                (df['godz'] == godz)]
-    else:
-        df = df[(df['sala'] == sala) &
-                (df['dzien'] == dzien) &
-                (df['tyg'] == tyg) &
-                (df['lok'] == lok) &
-                (df['sem'] == sem) &
-                (df['godz'] == godz)]
+    if isinstance(tyg, str):
+        df = df[(df['tyg'] == tyg)]
+    
+    df = df[(df['sala'] == sala) &
+            (df['dzien'] == dzien) &
+            (df['lok'] == lok) &
+            (df['sem'] == sem) &
+            (df['godz'] == godz)]
     return df
 
 
