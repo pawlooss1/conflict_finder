@@ -2,10 +2,7 @@ import pandas as pd
 import datetime
 import numpy as mp
 import xlrd
-
-
-def load_sheet(file_name, sheet_name):
-    return pd.read_excel(file_name, sheet_name)
+import tools as *
 
 
 
@@ -47,12 +44,6 @@ def find_conflict(df):
     return new.drop_duplicates(keep="first")
    
 
-
-def clean_df(df):
-    # wyrzuca puste wiersze, a kolumny dzien i tyg
-    # uzupelnia wartosciami domyslnymi (zeby nie bylo NaN i z nich skorzystac)
-    df = df.dropna(thresh=2)
-    return df.fillna(value={'dzien': 'noday', 'tyg': 'AB'})
 
 def finder(file_name, file_sheet1, file_sheet2, stationary = True):
     
