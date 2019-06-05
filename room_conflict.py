@@ -1,10 +1,9 @@
 from tools import *
 
 
-def filter_everything(df, lok, sala, dzien, godz):
+def filter_everything(df, sala, dzien, godz):
     return df[(df['sala'] == sala) &
               (df['dzien'] == dzien) &
-              (df['lok'] == lok) &
               (df['godz'] == godz)]
 
 
@@ -18,20 +17,18 @@ def filter_week(df, week):
 def find_conflict(df):
     new = pd.DataFrame(columns=df.columns.tolist())
     hours = df['godz'].unique()
-    locations = df['lok'].unique()
     classrooms = df['sala'].unique()
     days = df['dzien'].unique()
 
     for hour in hours:
-        for location in locations:
-            for classroom in classrooms:
-                for day in days:
-                    tmp_df = filter_everything(df, location, classroom, day, hour)
+        for classroom in classrooms:
+            for day in days:
+                tmp_df = filter_everything(df, classroom, day, hour)
 
-                    for week in tmp_df['tyg'].unique():
-                        tmp2_df = filter_week(tmp_df, week)
-                        if tmp2_df.shape[0] > 1:
-                            new = pd.concat([tmp2_df, new])
+                for week in tmp_df['tyg'].unique():
+                    tmp2_df = filter_week(tmp_df, week)
+                    if tmp2_df.shape[0] > 1:
+                        new = pd.concat([tmp2_df, new])
 
     return new.drop_duplicates(keep="first")
 
@@ -79,3 +76,4 @@ def add(df2, df):
     # df2.rename(columns={'cel': 'przedmiot','od': 'godz','do': 'koniec'}, inplace=True)
 
     return pd.concat([df, df2], sort=False)
+
