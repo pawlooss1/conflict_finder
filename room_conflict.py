@@ -9,44 +9,68 @@ def load_sheet(file_name, sheet_name):
 
 
 
-def filter_everything(df, lok, sala, tyg, dzien, godz):
-    if tyg != 'AB':
-        df = df[(df['tyg'] == tyg)]
+def filter(df, lok, sala, dzien, godz):
     
-    df = df[(df['sala'] == sala) &
+    
+    return df[(df['sala'] == sala) &
             (df['dzien'] == dzien) &
             (df['lok'] == lok) &
             (df['godz'] == godz)]
+
+
+def filter_week(df, week):
+    #Jeśli tydzień A lub B to ogranicza, a jeżeli AB to wypisuje wszystkie tygodnie
+    if (week == 'A') | (week == 'B'):
+        df = df[(df['tyg'] == week)]
     return df
 
 
 def find_conflict(df):
     new = pd.DataFrame(columns=df.columns.tolist())
-    for every_godz in df['godz'].unique():
-        print('godz')
-        for every_lok in df['lok'].unique():
-            print("lok")
-            for every_sala in df['sala'].unique():
-                print("sala")
-                for every_tyg in df['tyg'].unique():
-                    print("tyg")
-                    for every_dzien in df['dzien'].unique():
-                        print("dzien")
-                        df = filter_everything(df, every_lok, every_sala, every_tyg, every_dzien, every_godz)
-                        if df.shape[0] > 1:
-                            new = pd.concat([df, new])
-    return new
+    hours = df['godz'].unique()
+    lacations = df['lok'].unique()
+    classrooms = df['sala'].unique()
+    days = df['dzien'].unique()
+    
+    for hour in hours:
+        for location in lacations:
+            for classroom in classrooms:
+                for day in days:
+                    tmp_df = filter(df, location, classroom, day, hour)
+                    
+                    for week in tmp_df['tyg'].unique():
+                        tmp2_df = filter_week(tmp_df, week)
+                        if tmp2_df.shape[0] > 1:
+                            new = pd.concat([tmp2_df, new])
+                     
+    
+    return new.drop_duplicates(keep="first")
+   
 
-def finder(file_name, file_sheet1, file_sheet2):
+
+def clean_df(df):
+    # wyrzuca puste wiersze, a kolumny dzien i tyg
+    # uzupelnia wartosciami domyslnymi (zeby nie bylo NaN i z nich skorzystac)
+    df = df.dropna(thresh=2)
+    return df.fillna(value={'dzien': 'noday', 'tyg': 'AB'})
+
+def finder(file_name, file_sheet1, file_sheet2, stationary = True):
     
     df = load_sheet(file_name, file_sheet1)
-    df2 = load_sheet(file_name, file_sheet2)
-    new_df = fits(df, df2)
-    return find_conflict(new_df)
+    df = clean_df(df)
+    
+    if stationary == True:
+        df2 = load_sheet(file_name, file_sheet2)
+        df2 = clean_df(df2)
+        result = add(df, df2)
+        
+    result = df
+    return find_conflict(result)
 
-def fits(df2, df):
-
-    df2.rename(columns={'cel': 'przedmiot','od': 'godz','do': 'koniec'}, inplace=True)
+def add(df2, df):
+    
+    #w sumie chyba tego nie trzeba bo concat samo wie co gdzie dopasować
+    #df2.rename(columns={'cel': 'przedmiot','od': 'godz','do': 'koniec'}, inplace=True)
     
     return (concat(df, df2))
     
