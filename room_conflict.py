@@ -6,7 +6,7 @@ from tools import *
 
 
 
-def filter(df, lok, sala, dzien, godz):
+def filter_everything(df, lok, sala, dzien, godz):
     
     
     return df[(df['sala'] == sala) &
@@ -33,7 +33,7 @@ def find_conflict(df):
         for location in lacations:
             for classroom in classrooms:
                 for day in days:
-                    tmp_df = filter(df, location, classroom, day, hour)
+                    tmp_df = filter_everything(df, location, classroom, day, hour)
                     
                     for week in tmp_df['tyg'].unique():
                         tmp2_df = filter_week(tmp_df, week)
