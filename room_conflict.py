@@ -67,13 +67,9 @@ def find_room_conflict(file_name, sheet_name, stationary=True):
     else:
         print('Sprawdzam konflikty sal dla arkusza {}...'.format(sheet_name))
         conflicts = finder(file_name, sheet_name, stationary=False)
-    print(conflicts)
     print_conflicts(conflicts)
 
 
 def add(df2, df):
-    # w sumie chyba tego nie trzeba bo concat samo wie co gdzie dopasować
-    # df2.rename(columns={'cel': 'przedmiot','od': 'godz','do': 'koniec'}, inplace=True)
-
     return pd.concat([df, df2], sort=False)
 
