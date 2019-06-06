@@ -41,9 +41,10 @@ def add_90_minutes(start_time):
     return full_end.time()  # zwroc sam czas
 
 
-def print_conflict(lecture_index, lecture, class_index, class_conf):
-    statement = 'Wiersz {} ({}, {} {}) koliduje z\n' \
-                'wierszem {} ({}, {} {})\n'.format(lecture_index + 2, lecture['przedmiot'], lecture['sala'],
-                                                   lecture['godz'], class_index + 2, class_conf['przedmiot'],
-                                                   class_conf['sala'], class_conf['godz'])
+def print_conflict(class_1_index, class_1, class_2_index, class_2):
+    statement = 'Wiersz {} ({}, {} {}:{:02d}) koliduje z\n' \
+                'wierszem {} ({}, {} {}:{:02d})\n'.format(class_1_index + 2, class_1['przedmiot'], class_1['sala'],
+                                                          class_1['godz'].hour, class_1['godz'].minute,
+                                                          class_2_index + 2, class_2['przedmiot'], class_2['sala'],
+                                                          class_2['godz'].hour, class_2['godz'].minute)
     print(statement)
