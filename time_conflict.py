@@ -51,7 +51,9 @@ def find_time_conflicts_class_types(df, stationary):
 
 
 def find_time_conflicts(file_name, sheet_name, stationary=True):
-    print('Sprawdzam konflikty terminów dla arkusza {}...'.format(sheet_name))
+    print('*******************'
+          'Sprawdzam konflikty terminów dla arkusza {}...'
+          '*******************'.format(sheet_name))
     sheet = load_sheet(file_name, sheet_name)
     df = clean_df(sheet)
     class_types = df['studia'].unique()

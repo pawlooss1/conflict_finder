@@ -62,12 +62,17 @@ def print_conflicts(df):
 def find_room_conflict(file_name, sheet_name, stationary=True):
     if stationary:
         sheet_name2 = sheet_name[:-1] + 'inne'
-        print('Sprawdzam konflikty sal dla arkusza {} i {}...'.format(sheet_name, sheet_name2))
+        print('*******************'
+              'Sprawdzam konflikty sal dla arkusza {} i {}...'
+              '*******************'.format(sheet_name, sheet_name2))
         conflicts = finder(file_name, sheet_name, sheet_name2, stationary=True)
     else:
-        print('Sprawdzam konflikty sal dla arkusza {}...'.format(sheet_name))
+        print('*******************'
+              'Sprawdzam konflikty sal dla arkusza {}...'
+              '*******************'.format(sheet_name))
         conflicts = finder(file_name, sheet_name, stationary=False)
     print_conflicts(conflicts)
+    print()
 
 
 def add(df2, df):
